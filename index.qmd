@@ -1,0 +1,400 @@
+---
+title: "Creating a JavaScript Library for your Shiny Application"
+author: "Ashley Baldry"
+format: 
+  revealjs:
+    theme: [dark, custom.scss]
+    menu: false
+    width: 1200
+title-slide-attributes: 
+  data-background-image: ./images/camille-couvez-H5PnIYI_1I0-unsplash.jpeg
+---
+
+## Shiny + JavaScript
+
+::: {.incremental}
+- `{shiny} + JS = `
+- `<script></script>`
+- `<script src="path/to/javascript.js"></script>`
+:::
+
+::: {.notes}
+- JavaScript can easily be included into shiny applications to enhance the capabilities already present within shiny
+- Adding your first custom JavaScript feels like a massive milestone, and as you try out different JavaScript commands, you start adding more to your shiny application
+- Eventually you get comfortable enough to create entire custom inputs and outputs for shiny application in JavaScript, and the codebase continues to grow
+:::
+
+## {designer} Application
+
+![Demo of the 0.1.0 designer application](https://raw.githubusercontent.com/ashbaldry/designer/main/man/figures/example_app.gif)
+
+::: {.notes}
+- This is the application within the designer package. It allows a code-free way to template the UI of shiny applications.
+- 
+:::
+
+## Motivation 
+
+![JavaScript structure of 0.1.0 release](images/designer-0-1-js.png)
+
+::: {.incremental}
+- Adding more components made the code harder to read
+- Lots of duplicated code that could be simplified
+:::
+
+::: notes
+- In the initial release of the designer package, there are 4 JavaScript files:
+  - Three that are between 50 and 100 lines
+  - One (create-element.js) that is 650 lines - most amount of JS I've written
+- In the second iteration I was including some bs4Dash components to the application, and add them to that file was becoming unmanageable
+- Most of the code in that file was functionality about adding a new draggable element that was copying and pasting code from other components.
+:::
+
+## Library Set-Up
+
+::: {.incremental}
+- Choose your IDE of choice
+- Create a directory in your project for JS code
+  - Don't forget to add the folder to `.Rbuildignore`!
+- Download and install [Node.js](https://nodejs.org/)
+- Open your directory up in your IDE
+- Run `npm init` in the terminal to create `package.json`
+:::
+
+::: {.notes}
+- (IDE) In R, we tend to have one or two products/packages that are much more salient and well used for any given task. JS tends to have at least 10 of anything you want to use - so it's always useful to search for "top x in JavaScript" for some listicles
+- Personally like VS Code, it comes with loads of extensions that help with developing JavaScript (formatting, snippets, linting), plus the debugging functionality is particularly nice to use
+- Node is the runtime for JavaScript, it allows to run JavaScript code without having to be in a browser. It is much more powerful than that, ...
+
+:::
+
+## Example package.json
+
+```{.json .code-overflow-wrap}
+{
+  "name": "designer",
+  "version": "0.2.0",
+  "description": "JS for designer app",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Ashley Baldry",
+  "license": "MIT"
+}
+```
+
+::: {.incremental}
+- "main" is the entry point of the library
+- "scripts" is a list of commands that can be used in the terminal
+  - Dependency package commands can be used, or `node file.js` to run like `Rscript file.R`
+:::
+
+::: {.notes}
+- The package.json file is the JS version of the description file. When running `npm init` it will ask you for the name, description
+- A key difference is the "scripts" section. 
+  - One of the options that is asked when running `npm init` is the testing command. 
+- Anything defined in this list can be performed in the terminal with the prefix "node"
+- Speaking of dependencies...
+:::
+
+## Dependency Management
+
+:::{.incremental}
+- Node.js includes a package manager, `npm`, within its installation
+  - This works like {renv}, including a lock file within the project
+- Include jquery and shiny as dependencies
+  - `npm install jquery@3.6.0`
+  - `npm install github:rstudio/shiny`
+:::
+
+:::{.fragment}
+:::{.callout-important}
+Create a .gitignore in your JavaScript directory and include node_modules
+:::
+:::
+
+::: {.notes}
+Unlike renv, npm doesn't cache the dependencies, it adds them all within the node_modules sub-directory. Unless you want to add all these files on your remote Git repository, add this file to your gitignore at the first opportunity
+
+The shiny repository has the package.json in the top level of the repository, making it easy for us to grab the JavaScript part of it through `npm install`. This helps us not have issues with using the Shiny object for custom messages and sending input values to the UI within our own JavaScript
+:::
+
+## Example package.json
+
+```{.json code-line-numbers="11-14"}
+{
+  "name": "designer",
+  "version": "0.2.0",
+  "description": "JS for designer app",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Ashley Baldry",
+  "license": "MIT",
+  "dependencies": {
+    "@types/rstudio-shiny": "github:rstudio/shiny",
+    "jquery": "^3.6.0"
+  }
+}
+```
+
+## Communication Between Files
+
+::: {.incremental}
+- JavaScript files work in a modular fashion
+  - Only exported objects are accessible in other modules
+  - Objects have to be explicitly imported before use
+:::
+
+::: {.notes}
+R is one of the few languages where the location of a file in a package doesn't matter, it is all bundled into a single namespace.
+
+Whilst this might cause some tech debt when moving your code into its own library, it helps keep the code you've written in a much cleaner structure, and 
+:::
+
+## Class Inheritance
+
+::: {.columns}
+::: {.column}
+::: {.incremental}
+- A way to reduce duplicated code
+:::
+:::
+
+::: {.column}
+```{.js}
+// component/Component.js
+export class Component {
+  html = '<div></div>'
+  constructor = {
+    // runs when class is created
+  }
+}
+
+// component/Button.js
+import Component from 'Component'
+
+class Button extends Component {
+  html = '<button ...>...</button>'
+  constructor = {
+    // runs Component constructor
+    super()
+  }
+}
+```
+:::
+:::
+
+::: {.notes}
+- R is predominantly a functional language
+- Most programming languages, including JavaScript, are more object orientated - similar to how {R6} works
+- Use class inheritance to avoid the repeating code to create the different UI components in the designer application
+:::
+
+## Bundling
+
+```{.js}
+import { build } from 'esbuild'
+
+build({
+  entryPoints: ['index.js'],
+  bundle: true,
+  sourcemap: true,
+  outfile: '../inst/app/www/designer.min.js',
+  platform: 'node',
+  minify: true
+}).catch(
+  () => process.exit(1)
+)
+```
+
+::: {.incremental}
+- `npm install esbuild --save-dev`
+  - `--save-dev` means that we only want the library for development purposes
+- Include a source map to help debug errors in console
+:::
+
+::: {.notes}
+Several builders, when searching found that esbuild is significantly quicker, and have really seen it take longer than 0.5 seconds to bundle my JavaScript code.
+
+Save dev is an option that will add the library to a development dependency, sort of like a Suggets in the DESCRIPTION, but this will never need to be installed by the end user.
+
+The minifying will reduce all variable names you set into single letters. This makes it really hard to know what is going on in the console when debugging shiny applications. By including a source map you can at least see what code is being run when it errors. Alternatively include a build option that doesn't minify the code.
+
+Mention about Appsilon's {rhino} and the ability to use rhino::build_js
+:::
+
+## Example package.json
+
+```{.json code-line-numbers="6,8-9,16-18"}
+{
+  "name": "designer",
+  "version": "0.2.0",
+  "description": "JS for designer app",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "node build.js"
+  },
+  "author": "Ashley Baldry",
+  "license": "MIT",
+  "dependencies": {
+    "@types/rstudio-shiny": "github:rstudio/shiny",
+    "jquery": "^3.6.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.17.7"
+  }
+}
+```
+
+## Linting
+
+- eslint
+- VS Code extensions
+
+::: aside
+Other linting packages include
+:::
+
+::: {.notes}
+Big believer that all projects should include linting from the offset
+Lints in JS that wasn't aware of before:
+- No longer requiring ";" at the end of calls
+:::
+
+## Example package.json
+
+```{.json code-line-numbers="16,18-19"}
+{
+  "name": "designer",
+  "version": "0.2.0",
+  "description": "JS for designer app",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "node build.js"
+  },
+  "author": "Ashley Baldry",
+  "license": "MIT",
+  "dependencies": {
+    "@types/rstudio-shiny": "github:rstudio/shiny",
+    "jquery": "^3.6.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.17.7",
+    "eslint": "^8.0.1"
+  }
+}
+```
+
+## Unit Testing
+
+`npm install jest --dev`
+
+::: {.notes}
+Other unit testing packages include MochaJS, ChaiJS and Cypress.io
+:::
+
+## Example Unit Test
+
+
+
+## Example package.json
+
+```{.json code-line-numbers="6-7,9,16-17,20-21"}
+{
+  "name": "designer",
+  "version": "0.2.0",
+  "description": "JS for designer app",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "node build.js"
+  },
+  "author": "Ashley Baldry",
+  "license": "MIT",
+  "dependencies": {
+    "@types/rstudio-shiny": "github:rstudio/shiny",
+    "jquery": "^3.6.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.17.7",
+    "eslint": "^8.0.1",
+    "jest": "^29.3.1"
+  }
+}
+```
+
+## Continuous Integration (CI)
+
+Include JavaScript unit tests as part of your GitHub Actions
+
+```yaml
+name: Run JS Tests (Jest)
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+defaults:
+  run:
+    working-directory: srcjs
+jobs:
+  js-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: npm install
+    - name: Run tests
+      run: npm test 
+```
+
+::: {.notes}
+I have found when running unit tests through GH actions that certain JS libraries are pre-installed on the build servers, so no steps are required prior to installing the dependencies for your own JavaScript code.
+
+The whole process takes little over a minute
+:::
+
+## CI Results
+ 
+::: {.columns style="display: flex; height: max-content; align-items: center"}
+::: {.column}
+![](images/designer-js-unit-tests.png)
+:::
+::: {.column}
+JavaScript unit test results of the {designer} package
+
+</br>
+
+```
+Test Suites: 32 passed, 32 total
+Tests:       38 passed, 38 total
+Snapshots:   0 total
+Time:        5.948 s
+Ran all test suites.
+Done in 6.82s.
+```
+:::
+:::
+
+## Finished Result
+
+![JavaScript structure of dev branch](images/designer-dev-srcjs.png)
+
+::: {.notes}
+- In this project I did use yarn, but have seen the added convenience of using node as the package manager - one fewer dependency
+:::
+
+## Listicles
+
+- IDEs:
+- Package Management: 
+- Bundlers:
+- Unit Testing: [https://geekflare.com/javascript-unit-testing/](https://geekflare.com/javascript-unit-testing/)
+- Linters:
+
+## Q&A 

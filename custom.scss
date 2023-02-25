@@ -1,0 +1,27 @@
+/*-- scss:defaults --*/
+$font-family-sans-serif: Brown, Arial, sans-serif;
+$presentation-h1-font-size: 1.6em;
+$presentation-title-slide-text-align: left;
+$progress-color: #A561FF;
+
+/*-- scss:rules --*/
+aside p {
+  font-size: 0.7em;
+}
+
+.reveal .quarto-title-block .quarto-title-authors {
+  justify-content: $presentation-title-slide-text-align;
+  padding-top: 1em;
+}
+
+.reveal .quarto-title-block .quarto-title-authors .quarto-title-author {
+  padding-left: 0;
+}
+
+.reveal .progress {
+  color: $progress-color;
+}
+
+.no-title-slide h2 {
+  display: none;
+}
