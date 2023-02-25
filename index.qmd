@@ -6,25 +6,32 @@ format:
     theme: [dark, custom.scss]
     menu: false
     width: 1200
+from: markdown+emoji
 title-slide-attributes: 
   data-background-image: ./images/camille-couvez-H5PnIYI_1I0-unsplash.jpeg
 ---
 
-## Shiny + JavaScript
+## Shiny & JavaScript
 
 ::: {.incremental}
-- `{shiny} + JS = `
-- `<script></script>`
+- `{shiny} + JS =` :heart:
+- `tags$script(HTML("`<br>
+&nbsp;&nbsp;&nbsp;&nbsp;`$(document).ready(function() {`<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`$('[data-toggle="tooltip"]').tooltip()`<br>
+&nbsp;&nbsp;&nbsp;&nbsp;`})`<br>
+`"))`
 - `<script src="path/to/javascript.js"></script>`
+- :shrug:
 :::
 
 ::: {.notes}
 - JavaScript can easily be included into shiny applications to enhance the capabilities already present within shiny
 - Adding your first custom JavaScript feels like a massive milestone, and as you try out different JavaScript commands, you start adding more to your shiny application
 - Eventually you get comfortable enough to create entire custom inputs and outputs for shiny application in JavaScript, and the codebase continues to grow
+- But what is the next step after that?
 :::
 
-## {designer} Application
+## Motivation
 
 ![Demo of the 0.1.0 designer application](https://raw.githubusercontent.com/ashbaldry/designer/main/man/figures/example_app.gif)
 
@@ -252,8 +259,10 @@ Mention about Appsilon's {rhino} and the ability to use rhino::build_js
 
 ## Linting
 
-- eslint
+::: {.incremental}
 - VS Code extensions
+- eslint
+:::
 
 ::: aside
 Other linting packages include
@@ -292,15 +301,38 @@ Lints in JS that wasn't aware of before:
 
 ## Unit Testing
 
-`npm install jest --dev`
-
-::: {.notes}
-Other unit testing packages include MochaJS, ChaiJS and Cypress.io
+::: {.incremental}
+- `npm install --save-dev jest`
 :::
 
-## Example Unit Test
+```{.js}
+// component/Button.js
+import Component from 'Component'
 
+class Button extends Component {
+  html = '<button ...>...</button>'
+  constructor = {
+    // runs Component constructor
+    super()
+  }
+}
 
+// component/__tests__/Button.test.js
+import { Button } from '../Button'
+
+test('sanity test - button constructs successfully', () => {
+  const button = new Button()
+  expect(button.html).toBe('<button ...>...</button>')
+})
+
+```
+
+::: {.notes}
+Many different testing frameworks available in JavaScript, each with different syntaxes
+Using Jest - partially as recommended when running `npm init`, partially because recommended as it has a very similar structure as {testthat}
+Define the test name in the first argument, then run the test in the second. Individual tests used as expect().to()
+Other unit testing packages include MochaJS, ChaiJS and Cypress.io
+:::
 
 ## Example package.json
 
@@ -350,7 +382,7 @@ jobs:
     - name: Install modules
       run: npm install
     - name: Run tests
-      run: npm test 
+      run: npm run test 
 ```
 
 ::: {.notes}
@@ -388,13 +420,5 @@ Done in 6.82s.
 ::: {.notes}
 - In this project I did use yarn, but have seen the added convenience of using node as the package manager - one fewer dependency
 :::
-
-## Listicles
-
-- IDEs:
-- Package Management: 
-- Bundlers:
-- Unit Testing: [https://geekflare.com/javascript-unit-testing/](https://geekflare.com/javascript-unit-testing/)
-- Linters:
 
 ## Q&A 

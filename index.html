@@ -400,12 +400,13 @@ Ashley Baldry
 
 </section>
 <section id="shiny-javascript" class="slide level2">
-<h2>Shiny + JavaScript</h2>
+<h2>Shiny &amp; JavaScript</h2>
 <div>
 <ul>
-<li class="fragment"><code>{shiny} + JS =</code></li>
-<li class="fragment"><code>&lt;script&gt;&lt;/script&gt;</code></li>
+<li class="fragment"><code>{shiny} + JS =</code> <span class="emoji" data-emoji="heart">❤️</span></li>
+<li class="fragment"><code>tags$script(HTML("</code><br> &nbsp;&nbsp;&nbsp;&nbsp;<code>$(document).ready(function() {</code><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>$('[data-toggle="tooltip"]').tooltip()</code><br> &nbsp;&nbsp;&nbsp;&nbsp;<code>})</code><br> <code>"))</code></li>
 <li class="fragment"><code>&lt;script src="path/to/javascript.js"&gt;&lt;/script&gt;</code></li>
+<li class="fragment"><span class="emoji" data-emoji="shrug">🤷</span></li>
 </ul>
 </div>
 <aside class="notes">
@@ -413,6 +414,7 @@ Ashley Baldry
 <li>JavaScript can easily be included into shiny applications to enhance the capabilities already present within shiny</li>
 <li>Adding your first custom JavaScript feels like a massive milestone, and as you try out different JavaScript commands, you start adding more to your shiny application</li>
 <li>Eventually you get comfortable enough to create entire custom inputs and outputs for shiny application in JavaScript, and the codebase continues to grow</li>
+<li>But what is the next step after that?</li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -426,8 +428,8 @@ Ashley Baldry
           display:block!important;
       }</style></aside>
 </section>
-<section id="designer-application" class="slide level2">
-<h2>{designer} Application</h2>
+<section id="motivation" class="slide level2">
+<h2>Motivation</h2>
 
 <img data-src="https://raw.githubusercontent.com/ashbaldry/designer/main/man/figures/example_app.gif" class="r-stretch quarto-figure-center"><p class="caption">Demo of the 0.1.0 designer application</p><aside class="notes">
 <ul>
@@ -446,7 +448,7 @@ Ashley Baldry
           display:block!important;
       }</style></aside>
 </section>
-<section id="motivation" class="slide level2">
+<section id="motivation-1" class="slide level2">
 <h2>Motivation</h2>
 
 <img data-src="images/designer-0-1-js.png" class="r-stretch quarto-figure-center"><p class="caption">JavaScript structure of 0.1.0 release</p><div>
@@ -754,10 +756,12 @@ Ashley Baldry
 </section>
 <section id="linting" class="slide level2">
 <h2>Linting</h2>
+<div>
 <ul>
-<li>eslint</li>
-<li>VS Code extensions</li>
+<li class="fragment">VS Code extensions</li>
+<li class="fragment">eslint</li>
 </ul>
+</div>
 
 <aside class="notes">
 <p>Big believer that all projects should include linting from the offset Lints in JS that wasn’t aware of before: - No longer requiring “;” at the end of calls</p>
@@ -800,9 +804,31 @@ Ashley Baldry
 </section>
 <section id="unit-testing" class="slide level2">
 <h2>Unit Testing</h2>
-<p><code>npm install jest --dev</code></p>
+<div>
+<ul>
+<li class="fragment"><code>npm install --save-dev jest</code></li>
+</ul>
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">// component/Button.js</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="im">import</span> Component <span class="im">from</span> <span class="st">'Component'</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="kw">class</span> Button <span class="kw">extends</span> Component {</span>
+<span id="cb7-5"><a href="#cb7-5"></a>  html <span class="op">=</span> <span class="st">'&lt;button ...&gt;...&lt;/button&gt;'</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>  constructor <span class="op">=</span> {</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="co">// runs Component constructor</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="kw">super</span>()</span>
+<span id="cb7-9"><a href="#cb7-9"></a>  }</span>
+<span id="cb7-10"><a href="#cb7-10"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">// component/__tests__/Button.test.js</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="im">import</span> { Button } <span class="im">from</span> <span class="st">'../Button'</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="fu">test</span>(<span class="st">'sanity test - button constructs successfully'</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb7-16"><a href="#cb7-16"></a>  <span class="kw">const</span> button <span class="op">=</span> <span class="kw">new</span> <span class="fu">Button</span>()</span>
+<span id="cb7-17"><a href="#cb7-17"></a>  <span class="fu">expect</span>(button<span class="op">.</span><span class="at">html</span>)<span class="op">.</span><span class="fu">toBe</span>(<span class="st">'&lt;button ...&gt;...&lt;/button&gt;'</span>)</span>
+<span id="cb7-18"><a href="#cb7-18"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <aside class="notes">
-<p>Other unit testing packages include MochaJS, ChaiJS and Cypress.io</p>
+<p>Many different testing frameworks available in JavaScript, each with different syntaxes Using Jest - partially as recommended when running <code>npm init</code>, partially because recommended as it has a very similar structure as {testthat} Define the test name in the first argument, then run the test in the second. Individual tests used as expect().to() Other unit testing packages include MochaJS, ChaiJS and Cypress.io</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -815,54 +841,51 @@ Ashley Baldry
           display:block!important;
       }</style></aside>
 </section>
-<section id="example-unit-test" class="slide level2">
-<h2>Example Unit Test</h2>
-</section>
 <section id="example-package.json-4" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb7" data-code-line-numbers="6-7,9,16-17,20-21"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">{</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"jest"</span><span class="fu">,</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>    <span class="dt">"build"</span><span class="fu">:</span> <span class="st">"node build.js"</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a>  <span class="fu">},</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
-<span id="cb7-14"><a href="#cb7-14"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a>  <span class="fu">},</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb7-17"><a href="#cb7-17"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.7"</span><span class="fu">,</span></span>
-<span id="cb7-18"><a href="#cb7-18"></a>    <span class="dt">"eslint"</span><span class="fu">:</span> <span class="st">"^8.0.1"</span><span class="fu">,</span></span>
-<span id="cb7-19"><a href="#cb7-19"></a>    <span class="dt">"jest"</span><span class="fu">:</span> <span class="st">"^29.3.1"</span></span>
-<span id="cb7-20"><a href="#cb7-20"></a>  <span class="fu">}</span></span>
-<span id="cb7-21"><a href="#cb7-21"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8" data-code-line-numbers="6-7,9,16-17,20-21"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"jest"</span><span class="fu">,</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="dt">"build"</span><span class="fu">:</span> <span class="st">"node build.js"</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>  <span class="fu">},</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a>  <span class="fu">},</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.7"</span><span class="fu">,</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>    <span class="dt">"eslint"</span><span class="fu">:</span> <span class="st">"^8.0.1"</span><span class="fu">,</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>    <span class="dt">"jest"</span><span class="fu">:</span> <span class="st">"^29.3.1"</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a>  <span class="fu">}</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="continuous-integration-ci" class="slide level2">
 <h2>Continuous Integration (CI)</h2>
 <p>Include JavaScript unit tests as part of your GitHub Actions</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Run JS Tests (Jest)</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">dev</span><span class="kw">,</span><span class="at"> main</span><span class="kw">]</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">dev</span><span class="kw">,</span><span class="at"> main</span><span class="kw">]</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="fu">defaults</span><span class="kw">:</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="at">  </span><span class="fu">run</span><span class="kw">:</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a><span class="at">    </span><span class="fu">working-directory</span><span class="kw">:</span><span class="at"> srcjs</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="at">  </span><span class="fu">js-unit-tests</span><span class="kw">:</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install modules</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="at">      </span><span class="fu">run</span><span class="kw">:</span><span class="at"> npm install</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run tests</span></span>
-<span id="cb8-18"><a href="#cb8-18"></a><span class="at">      </span><span class="fu">run</span><span class="kw">:</span><span class="at"> npm test </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Run JS Tests (Jest)</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">on</span><span class="kw">:</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">dev</span><span class="kw">,</span><span class="at"> main</span><span class="kw">]</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="at">  </span><span class="fu">pull_request</span><span class="kw">:</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">dev</span><span class="kw">,</span><span class="at"> main</span><span class="kw">]</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="fu">defaults</span><span class="kw">:</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="at">  </span><span class="fu">run</span><span class="kw">:</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="at">    </span><span class="fu">working-directory</span><span class="kw">:</span><span class="at"> srcjs</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="fu">jobs</span><span class="kw">:</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="at">  </span><span class="fu">js-unit-tests</span><span class="kw">:</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v2</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install modules</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="at">      </span><span class="fu">run</span><span class="kw">:</span><span class="at"> npm install</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run tests</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="at">      </span><span class="fu">run</span><span class="kw">:</span><span class="at"> npm run test </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <aside class="notes">
 <p>I have found when running unit tests through GH actions that certain JS libraries are pre-installed on the build servers, so no steps are required prior to installing the dependencies for your own JavaScript code.</p>
 <p>The whole process takes little over a minute</p>
@@ -913,16 +936,6 @@ Done in 6.82s.</code></pre>
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
-<section id="listicles" class="slide level2">
-<h2>Listicles</h2>
-<ul>
-<li>IDEs:</li>
-<li>Package Management:</li>
-<li>Bundlers:</li>
-<li>Unit Testing: <a href="https://geekflare.com/javascript-unit-testing/">https://geekflare.com/javascript-unit-testing/</a></li>
-<li>Linters:</li>
-</ul>
 </section>
 <section id="qa" class="slide level2">
 <h2>Q&amp;A</h2>
