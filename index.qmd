@@ -6,6 +6,8 @@ format:
     theme: [dark, custom.scss]
     menu: false
     width: 1200
+    template-partials:
+      - title-slide.html
 from: markdown+emoji
 title-slide-attributes: 
   data-background-image: ./images/camille-couvez-H5PnIYI_1I0-unsplash.jpeg
@@ -20,14 +22,16 @@ title-slide-attributes:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`$('[data-toggle="tooltip"]').tooltip()`<br>
 &nbsp;&nbsp;&nbsp;&nbsp;`})`<br>
 `"))`
-- `<script src="path/to/javascript.js"></script>`
+- `<script src="custom.js"></script>`
+- `Shiny.inputBindings.register(inputBinding, "your.inputBinding")`
 - :shrug:
 :::
 
 ::: {.notes}
 - JavaScript can easily be included into shiny applications to enhance the capabilities already present within shiny
 - Adding your first custom JavaScript feels like a massive milestone, and as you try out different JavaScript commands, you start adding more to your shiny application
-- Eventually you get comfortable enough to create entire custom inputs and outputs for shiny application in JavaScript, and the codebase continues to grow
+- Then you write enough to add it into its own separate script 
+- Eventually you get comfortable enough to create custom inputs and outputs for shiny application in JavaScript, and the codebase continues to grow
 - But what is the next step after that?
 :::
 
@@ -35,9 +39,13 @@ title-slide-attributes:
 
 ![Demo of the 0.1.0 designer application](https://raw.githubusercontent.com/ashbaldry/designer/main/man/figures/example_app.gif)
 
+::: footer
+Latest version: [https://ashbaldry.shinyapps.io/designer/](https://ashbaldry.shinyapps.io/designer/)
+:::
+
 ::: {.notes}
+- Why I needed to learn to create a JavaScript library
 - This is the application within the designer package. It allows a code-free way to template the UI of shiny applications.
-- 
 :::
 
 ## Motivation 
@@ -52,9 +60,13 @@ title-slide-attributes:
 ::: notes
 - In the initial release of the designer package, there are 4 JavaScript files:
   - Three that are between 50 and 100 lines
-  - One (create-element.js) that is 650 lines - most amount of JS I've written
-- In the second iteration I was including some bs4Dash components to the application, and add them to that file was becoming unmanageable
-- Most of the code in that file was functionality about adding a new draggable element that was copying and pasting code from other components.
+    - A custom input for the content of the template
+    - Behaviour to trigger on application load
+    - Helper functions for the initial set-up
+  - The fourth (create-element.js) is 650 lines - most amount of JS I've written
+    - How to create each type of component
+- In the second iteration I was including some bs4Dash components to the application, and adding them to that file was becoming unmanageable
+- Most of the code in that file was functionality about adding a new draggable element that was copying and pasting code from other components
 :::
 
 ## Library Set-Up
@@ -62,31 +74,37 @@ title-slide-attributes:
 ::: {.incremental}
 - Choose your IDE of choice
 - Create a directory in your project for JS code
+  - Standard name: `srcjs`
   - Don't forget to add the folder to `.Rbuildignore`!
 - Download and install [Node.js](https://nodejs.org/)
-- Open your directory up in your IDE
+- Open the directory up in your IDE
 - Run `npm init` in the terminal to create `package.json`
+:::
+
+::: footer
+Top IDEs: [https://www.tabnine.com/blog/best-ides-for-javascript/](https://www.tabnine.com/blog/best-ides-for-javascript/)
 :::
 
 ::: {.notes}
 - (IDE) In R, we tend to have one or two products/packages that are much more salient and well used for any given task. JS tends to have at least 10 of anything you want to use - so it's always useful to search for "top x in JavaScript" for some listicles
 - Personally like VS Code, it comes with loads of extensions that help with developing JavaScript (formatting, snippets, linting), plus the debugging functionality is particularly nice to use
-- Node is the runtime for JavaScript, it allows to run JavaScript code without having to be in a browser. It is much more powerful than that, ...
-
+- "src" stands for "source"
+- If you are including the application in the package then it won't need to be included in the published version of the package
+- Node is the runtime for JavaScript, it allows to run JavaScript code without having to be in a browser. It is much more powerful than that, it includes `npm`, a package manager to install all the required dependencies for your JS code
+- `npm init` will ask a series of questions around the package like name, version and description. It will add this all into the package.json file
 :::
 
 ## Example package.json
 
-```{.json .code-overflow-wrap}
+```{.json .code-overflow-wrap code-line-numbers="5-8"}
 {
   "name": "designer",
   "version": "0.2.0",
   "description": "JS for designer app",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ashley Baldry",
   "license": "MIT"
 }
 ```
@@ -94,11 +112,14 @@ title-slide-attributes:
 ::: {.incremental}
 - "main" is the entry point of the library
 - "scripts" is a list of commands that can be used in the terminal
+  - Called as `npm run test`
   - Dependency package commands can be used, or `node file.js` to run like `Rscript file.R`
 :::
 
 ::: {.notes}
-- The package.json file is the JS version of the description file. When running `npm init` it will ask you for the name, description
+- The package.json file is the JS version of the description file
+- Two key differences:
+  - "main" is the entry point of the library. It is a single file where all of exported code is available to call or run.
 - A key difference is the "scripts" section. 
   - One of the options that is asked when running `npm init` is the testing command. 
 - Anything defined in this list can be performed in the terminal with the prefix "node"
@@ -110,9 +131,9 @@ title-slide-attributes:
 :::{.incremental}
 - Node.js includes a package manager, `npm`, within its installation
   - This works like {renv}, including a lock file within the project
-- Include jquery and shiny as dependencies
-  - `npm install jquery@3.6.0`
+- Include shiny and jquery as dependencies
   - `npm install github:rstudio/shiny`
+  - `npm install jquery@3.5.14`
 :::
 
 :::{.fragment}
@@ -129,16 +150,15 @@ The shiny repository has the package.json in the top level of the repository, ma
 
 ## Example package.json
 
-```{.json code-line-numbers="11-14"}
+```{.json code-line-numbers="10-13"}
 {
   "name": "designer",
   "version": "0.2.0",
   "description": "JS for designer app",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ashley Baldry",
   "license": "MIT",
   "dependencies": {
     "@types/rstudio-shiny": "github:rstudio/shiny",
@@ -242,7 +262,7 @@ Mention about Appsilon's {rhino} and the ability to use rhino::build_js
   "description": "JS for designer app",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build.js"
   },
   "author": "Ashley Baldry",
@@ -276,7 +296,7 @@ Lints in JS that wasn't aware of before:
 
 ## Example package.json
 
-```{.json code-line-numbers="16,18-19"}
+```{.json code-line-numbers="7,16,18-19"}
 {
   "name": "designer",
   "version": "0.2.0",

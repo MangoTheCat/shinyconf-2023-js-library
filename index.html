@@ -387,17 +387,10 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-image="./images/camille-couvez-H5PnIYI_1I0-unsplash.jpeg" class="quarto-title-block center">
+<section id="title-slide" data-background-image="./images/camille-couvez-H5PnIYI_1I0-unsplash.jpeg" class="center">
+  <img src="images/Ascent_logo_white.png" class="title-logo">
   <h1 class="title">Creating a JavaScript Library for your Shiny Application</h1>
-
-<div class="quarto-title-authors">
-<div class="quarto-title-author">
-<div class="quarto-title-author-name">
-Ashley Baldry 
-</div>
-</div>
-</div>
-
+  <p class="author">Ashley Baldry</p>
 </section>
 <section id="shiny-javascript" class="slide level2">
 <h2>Shiny &amp; JavaScript</h2>
@@ -405,7 +398,8 @@ Ashley Baldry
 <ul>
 <li class="fragment"><code>{shiny} + JS =</code> <span class="emoji" data-emoji="heart">❤️</span></li>
 <li class="fragment"><code>tags$script(HTML("</code><br> &nbsp;&nbsp;&nbsp;&nbsp;<code>$(document).ready(function() {</code><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>$('[data-toggle="tooltip"]').tooltip()</code><br> &nbsp;&nbsp;&nbsp;&nbsp;<code>})</code><br> <code>"))</code></li>
-<li class="fragment"><code>&lt;script src="path/to/javascript.js"&gt;&lt;/script&gt;</code></li>
+<li class="fragment"><code>&lt;script src="custom.js"&gt;&lt;/script&gt;</code></li>
+<li class="fragment"><code>Shiny.inputBindings.register(inputBinding, "your.inputBinding")</code></li>
 <li class="fragment"><span class="emoji" data-emoji="shrug">🤷</span></li>
 </ul>
 </div>
@@ -413,7 +407,8 @@ Ashley Baldry
 <ul>
 <li>JavaScript can easily be included into shiny applications to enhance the capabilities already present within shiny</li>
 <li>Adding your first custom JavaScript feels like a massive milestone, and as you try out different JavaScript commands, you start adding more to your shiny application</li>
-<li>Eventually you get comfortable enough to create entire custom inputs and outputs for shiny application in JavaScript, and the codebase continues to grow</li>
+<li>Then you write enough to add it into its own separate script</li>
+<li>Eventually you get comfortable enough to create custom inputs and outputs for shiny application in JavaScript, and the codebase continues to grow</li>
 <li>But what is the next step after that?</li>
 </ul>
 <style type="text/css">
@@ -431,10 +426,13 @@ Ashley Baldry
 <section id="motivation" class="slide level2">
 <h2>Motivation</h2>
 
-<img data-src="https://raw.githubusercontent.com/ashbaldry/designer/main/man/figures/example_app.gif" class="r-stretch quarto-figure-center"><p class="caption">Demo of the 0.1.0 designer application</p><aside class="notes">
+<img data-src="https://raw.githubusercontent.com/ashbaldry/designer/main/man/figures/example_app.gif" class="r-stretch quarto-figure-center"><p class="caption">Demo of the 0.1.0 designer application</p><div class="footer">
+<p>Latest version: <a href="https://ashbaldry.shinyapps.io/designer/">https://ashbaldry.shinyapps.io/designer/</a></p>
+</div>
+<aside class="notes">
 <ul>
+<li>Why I needed to learn to create a JavaScript library</li>
 <li>This is the application within the designer package. It allows a code-free way to template the UI of shiny applications.</li>
-<li></li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -461,11 +459,19 @@ Ashley Baldry
 <ul>
 <li>In the initial release of the designer package, there are 4 JavaScript files:
 <ul>
-<li>Three that are between 50 and 100 lines</li>
-<li>One (create-element.js) that is 650 lines - most amount of JS I’ve written</li>
+<li>Three that are between 50 and 100 lines
+<ul>
+<li>A custom input for the content of the template</li>
+<li>Behaviour to trigger on application load</li>
+<li>Helper functions for the initial set-up</li>
 </ul></li>
-<li>In the second iteration I was including some bs4Dash components to the application, and add them to that file was becoming unmanageable</li>
-<li>Most of the code in that file was functionality about adding a new draggable element that was copying and pasting code from other components.</li>
+<li>The fourth (create-element.js) is 650 lines - most amount of JS I’ve written
+<ul>
+<li>How to create each type of component</li>
+</ul></li>
+</ul></li>
+<li>In the second iteration I was including some bs4Dash components to the application, and adding them to that file was becoming unmanageable</li>
+<li>Most of the code in that file was functionality about adding a new draggable element that was copying and pasting code from other components</li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -486,18 +492,25 @@ Ashley Baldry
 <li class="fragment">Choose your IDE of choice</li>
 <li class="fragment">Create a directory in your project for JS code
 <ul>
+<li class="fragment">Standard name: <code>srcjs</code></li>
 <li class="fragment">Don’t forget to add the folder to <code>.Rbuildignore</code>!</li>
 </ul></li>
 <li class="fragment">Download and install <a href="https://nodejs.org/">Node.js</a></li>
-<li class="fragment">Open your directory up in your IDE</li>
+<li class="fragment">Open the directory up in your IDE</li>
 <li class="fragment">Run <code>npm init</code> in the terminal to create <code>package.json</code></li>
 </ul>
+</div>
+<div class="footer">
+<p>Top IDEs: <a href="https://www.tabnine.com/blog/best-ides-for-javascript/">https://www.tabnine.com/blog/best-ides-for-javascript/</a></p>
 </div>
 <aside class="notes">
 <ul>
 <li>(IDE) In R, we tend to have one or two products/packages that are much more salient and well used for any given task. JS tends to have at least 10 of anything you want to use - so it’s always useful to search for “top x in JavaScript” for some listicles</li>
 <li>Personally like VS Code, it comes with loads of extensions that help with developing JavaScript (formatting, snippets, linting), plus the debugging functionality is particularly nice to use</li>
-<li>Node is the runtime for JavaScript, it allows to run JavaScript code without having to be in a browser. It is much more powerful than that, …</li>
+<li>“src” stands for “source”</li>
+<li>If you are including the application in the package then it won’t need to be included in the published version of the package</li>
+<li>Node is the runtime for JavaScript, it allows to run JavaScript code without having to be in a browser. It is much more powerful than that, it includes <code>npm</code>, a package manager to install all the required dependencies for your JS code</li>
+<li><code>npm init</code> will ask a series of questions around the package like name, version and description. It will add this all into the package.json file</li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -513,29 +526,33 @@ Ashley Baldry
 </section>
 <section id="example-package.json" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource json code-overflow-wrap number-lines code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb1" data-code-line-numbers="5-8"><pre class="sourceCode numberSource json code-overflow-wrap number-lines code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">{</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
 <span id="cb1-5"><a href="#cb1-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
 <span id="cb1-6"><a href="#cb1-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"jest"</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span></span>
 <span id="cb1-8"><a href="#cb1-8"></a>  <span class="fu">},</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 <ul>
 <li class="fragment">“main” is the entry point of the library</li>
 <li class="fragment">“scripts” is a list of commands that can be used in the terminal
 <ul>
+<li class="fragment">Called as <code>npm run test</code></li>
 <li class="fragment">Dependency package commands can be used, or <code>node file.js</code> to run like <code>Rscript file.R</code></li>
 </ul></li>
 </ul>
 </div>
 <aside class="notes">
 <ul>
-<li>The package.json file is the JS version of the description file. When running <code>npm init</code> it will ask you for the name, description</li>
+<li>The package.json file is the JS version of the description file</li>
+<li>Two key differences:
+<ul>
+<li>“main” is the entry point of the library. It is a single file where all of exported code is available to call or run.</li>
+</ul></li>
 <li>A key difference is the “scripts” section.
 <ul>
 <li>One of the options that is asked when running <code>npm init</code> is the testing command.</li>
@@ -563,10 +580,10 @@ Ashley Baldry
 <ul>
 <li class="fragment">This works like {renv}, including a lock file within the project</li>
 </ul></li>
-<li class="fragment">Include jquery and shiny as dependencies
+<li class="fragment">Include shiny and jquery as dependencies
 <ul>
-<li class="fragment"><code>npm install jquery@3.6.0</code></li>
 <li class="fragment"><code>npm install github:rstudio/shiny</code></li>
+<li class="fragment"><code>npm install jquery@3.5.14</code></li>
 </ul></li>
 </ul>
 </div>
@@ -602,21 +619,20 @@ Ashley Baldry
 </section>
 <section id="example-package.json-1" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb2" data-code-line-numbers="11-14"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb2" data-code-line-numbers="10-13"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">{</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"jest"</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span></span>
 <span id="cb2-8"><a href="#cb2-8"></a>  <span class="fu">},</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a>  <span class="fu">}</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-9"><a href="#cb2-9"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>  <span class="fu">}</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="communication-between-files" class="slide level2">
 <h2>Communication Between Files</h2>
@@ -740,7 +756,7 @@ Ashley Baldry
 <span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
 <span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"jest"</span><span class="fu">,</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span><span class="fu">,</span></span>
 <span id="cb5-8"><a href="#cb5-8"></a>    <span class="dt">"build"</span><span class="fu">:</span> <span class="st">"node build.js"</span></span>
 <span id="cb5-9"><a href="#cb5-9"></a>  <span class="fu">},</span></span>
 <span id="cb5-10"><a href="#cb5-10"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
@@ -781,7 +797,7 @@ Ashley Baldry
 </div></aside></section>
 <section id="example-package.json-3" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb6" data-code-line-numbers="16,18-19"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb6" data-code-line-numbers="7,16,18-19"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">{</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
