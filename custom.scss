@@ -34,3 +34,15 @@ aside p {
 #title-slide h1 {
   margin-bottom: 5vh;
 }
+
+pre.full-height-js-code.sourceCode code {
+  max-height: 100%;
+}
+
+.q-a-slide h2 {
+  margin-top: 25vh;
+  font-size: 6rem;
+  background: linear-gradient(to right, #A561FF 0%, #64F0AF 20%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

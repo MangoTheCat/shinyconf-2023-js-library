@@ -541,7 +541,7 @@
 <li class="fragment">“main” is the entry point of the library</li>
 <li class="fragment">“scripts” is a list of commands that can be used in the terminal
 <ul>
-<li class="fragment">Called as <code>npm run test</code></li>
+<li class="fragment">Run by calling <code>npm run test</code></li>
 <li class="fragment">Dependency package commands can be used, or <code>node file.js</code> to run like <code>Rscript file.R</code></li>
 </ul></li>
 </ul>
@@ -580,10 +580,10 @@
 <ul>
 <li class="fragment">This works like {renv}, including a lock file within the project</li>
 </ul></li>
-<li class="fragment">Include shiny and jquery as dependencies
+<li class="fragment">Include shiny and jQuery as dependencies
 <ul>
 <li class="fragment"><code>npm install github:rstudio/shiny</code></li>
-<li class="fragment"><code>npm install jquery@3.5.14</code></li>
+<li class="fragment"><code>npm install @types/jquery@3.5.14</code></li>
 </ul></li>
 </ul>
 </div>
@@ -597,7 +597,7 @@
 <p><strong>Important</strong></p>
 </div>
 <div class="callout-content">
-<p>Create a .gitignore in your JavaScript directory and include node_modules</p>
+<p>Create a .gitignore in your JavaScript directory and include <code>node_modules</code></p>
 </div>
 </div>
 </div>
@@ -605,6 +605,8 @@
 <aside class="notes">
 <p>Unlike renv, npm doesn’t cache the dependencies, it adds them all within the node_modules sub-directory. Unless you want to add all these files on your remote Git repository, add this file to your gitignore at the first opportunity</p>
 <p>The shiny repository has the package.json in the top level of the repository, making it easy for us to grab the JavaScript part of it through <code>npm install</code>. This helps us not have issues with using the Shiny object for custom messages and sending input values to the UI within our own JavaScript</p>
+<p>Specifying the version of jQuery so that it matches the version available in shiny. The types refers to TypeScript</p>
+<p>Twice I’ve contributed to packages with JavaScript and twice we’ve forgotten to include this file.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -619,20 +621,33 @@
 </section>
 <section id="example-package.json-1" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb2" data-code-line-numbers="10-13"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb2" data-code-line-numbers="8-12"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">{</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>  <span class="fu">},</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>  <span class="fu">}</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>  <span class="fu">},</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="dt">"@types/jquery"</span><span class="fu">:</span> <span class="st">"^3.5.14"</span><span class="fu">,</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="dt">"sortablejs"</span><span class="fu">:</span> <span class="st">"^1.15.0"</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>  <span class="fu">}</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<aside class="notes">
+<p>You can now see the dependencies specified within the package.json file</p>
+<p>Heavily dependent on sortable js in my project, so inlcuded as a dependency</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="communication-between-files" class="slide level2">
 <h2>Communication Between Files</h2>
@@ -640,14 +655,22 @@
 <ul>
 <li class="fragment">JavaScript files work in a modular fashion
 <ul>
-<li class="fragment">Only exported objects are accessible in other modules</li>
-<li class="fragment">Objects have to be explicitly imported before use</li>
+<li class="fragment">Similar to the <a href="https://klmr.me/box/"><code>{box}</code></a> package works</li>
+<li class="fragment">Only exported objects are accessible in other modules
+<ul>
+<li class="fragment">When defining an object add <code>export</code> beforehand</li>
+</ul></li>
+<li class="fragment">Objects have to be explicitly imported before use
+<ul>
+<li class="fragment"><code>import { ... } from './dependency.js'</code></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
 <aside class="notes">
-<p>R is one of the few languages where the location of a file in a package doesn’t matter, it is all bundled into a single namespace.</p>
-<p>Whilst this might cause some tech debt when moving your code into its own library, it helps keep the code you’ve written in a much cleaner structure, and</p>
+<p>R is one of the few languages where the location of a file in a package doesn’t matter, it is all bundled into a single namespace. JavaScript assumes that nothing has been imported in the script, so any call to another function object will result in an error.</p>
+<p>If you’ve ever used the {box} package (one of the dependencies of the {rhino} application infrastructure) then it is similar in how it works.</p>
+<p>Whilst this might cause some time to split out your JavaScript into several files and reference using import/export methods will make it a lot easier to manage your code in the long run.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -667,27 +690,36 @@
 <div>
 <ul>
 <li class="fragment">A way to reduce duplicated code</li>
+<li class="fragment">Extremely useful when creating 20+ components
+<ul>
+<li class="fragment"><code>Component</code> class contains several methods accessible to individual components</li>
+<li class="fragment">Overwrite methods when needed</li>
+</ul></li>
 </ul>
 </div>
 </div><div class="column">
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">// component/Component.js</span></span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource js full-height-js-code number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">// component/Component.js</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="im">export</span> <span class="kw">class</span> Component {</span>
 <span id="cb3-3"><a href="#cb3-3"></a>  html <span class="op">=</span> <span class="st">'&lt;div&gt;&lt;/div&gt;'</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>  constructor <span class="op">=</span> {</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">constructor</span> () {</span>
 <span id="cb3-5"><a href="#cb3-5"></a>    <span class="co">// runs when class is created</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a>  }</span>
-<span id="cb3-7"><a href="#cb3-7"></a>}</span>
-<span id="cb3-8"><a href="#cb3-8"></a></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">// component/Button.js</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="im">import</span> Component <span class="im">from</span> <span class="st">'Component'</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="kw">class</span> Button <span class="kw">extends</span> Component {</span>
-<span id="cb3-13"><a href="#cb3-13"></a>  html <span class="op">=</span> <span class="st">'&lt;button ...&gt;...&lt;/button&gt;'</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a>  constructor <span class="op">=</span> {</span>
-<span id="cb3-15"><a href="#cb3-15"></a>    <span class="co">// runs Component constructor</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a>    <span class="kw">super</span>()</span>
-<span id="cb3-17"><a href="#cb3-17"></a>  }</span>
-<span id="cb3-18"><a href="#cb3-18"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-7"><a href="#cb3-7"></a>  </span>
+<span id="cb3-8"><a href="#cb3-8"></a>  <span class="fu">createComponent</span> () {</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="cf">return</span> <span class="kw">this</span><span class="op">.</span><span class="at">html</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>  }</span>
+<span id="cb3-11"><a href="#cb3-11"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">// component/Button.js</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="im">import</span> {Component} <span class="im">from</span> <span class="st">'./Component'</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="kw">class</span> Button <span class="kw">extends</span> Component {</span>
+<span id="cb3-17"><a href="#cb3-17"></a>  html <span class="op">=</span> <span class="st">'&lt;button ...&gt;...&lt;/button&gt;'</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a>  <span class="fu">constructor</span> () {</span>
+<span id="cb3-19"><a href="#cb3-19"></a>    <span class="co">// runs Component constructor</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>    <span class="kw">super</span>()</span>
+<span id="cb3-21"><a href="#cb3-21"></a>  }</span>
+<span id="cb3-22"><a href="#cb3-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <aside class="notes">
@@ -695,6 +727,8 @@
 <li>R is predominantly a functional language</li>
 <li>Most programming languages, including JavaScript, are more object orientated - similar to how {R6} works</li>
 <li>Use class inheritance to avoid the repeating code to create the different UI components in the designer application</li>
+<li>Component class included methods to generate random IDs, or validating the CSS unit string</li>
+<li>Usually overwrote a method that created the the HTML, as most components have options that can be set by the user</li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -711,31 +745,29 @@
 <section id="bundling" class="slide level2">
 <h2>Bundling</h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> { build } <span class="im">from</span> <span class="st">'esbuild'</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">build</span>({</span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">entryPoints</span><span class="op">:</span> [<span class="st">'index.js'</span>]<span class="op">,</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">bundle</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">sourcemap</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>  <span class="dt">outfile</span><span class="op">:</span> <span class="st">'../inst/app/www/designer.min.js'</span><span class="op">,</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a>  <span class="dt">platform</span><span class="op">:</span> <span class="st">'node'</span><span class="op">,</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>  <span class="dt">minify</span><span class="op">:</span> <span class="kw">true</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>})<span class="op">.</span><span class="fu">catch</span>(</span>
-<span id="cb4-11"><a href="#cb4-11"></a>  () <span class="kw">=&gt;</span> <span class="bu">process</span><span class="op">.</span><span class="fu">exit</span>(<span class="dv">1</span>)</span>
-<span id="cb4-12"><a href="#cb4-12"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">build</span>({</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">entryPoints</span><span class="op">:</span> [<span class="st">'index.js'</span>]<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">bundle</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">sourcemap</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">outfile</span><span class="op">:</span> <span class="st">'../inst/app/www/designer.min.js'</span><span class="op">,</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="dt">platform</span><span class="op">:</span> <span class="st">'node'</span><span class="op">,</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="dt">minify</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>})<span class="op">.</span><span class="fu">catch</span>(</span>
+<span id="cb4-10"><a href="#cb4-10"></a>  () <span class="kw">=&gt;</span> <span class="bu">process</span><span class="op">.</span><span class="fu">exit</span>(<span class="dv">1</span>)</span>
+<span id="cb4-11"><a href="#cb4-11"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 <ul>
 <li class="fragment"><code>npm install esbuild --save-dev</code>
 <ul>
-<li class="fragment"><code>--save-dev</code> means that we only want the library for development purposes</li>
+<li class="fragment"><code>--save-dev</code> only includes package for development purposes</li>
 </ul></li>
 <li class="fragment">Include a source map to help debug errors in console</li>
 </ul>
 </div>
 <aside class="notes">
-<p>Several builders, when searching found that esbuild is significantly quicker, and have really seen it take longer than 0.5 seconds to bundle my JavaScript code.</p>
+<p>Several bundlers available, however when searching found that esbuild is significantly quicker, and have rarely seen it take longer than 0.5 seconds to bundle my JavaScript code.</p>
 <p>Save dev is an option that will add the library to a development dependency, sort of like a Suggets in the DESCRIPTION, but this will never need to be installed by the end user.</p>
 <p>The minifying will reduce all variable names you set into single letters. This makes it really hard to know what is going on in the console when debugging shiny applications. By including a source map you can at least see what code is being run when it errors. Alternatively include a build option that doesn’t minify the code.</p>
-<p>Mention about Appsilon’s {rhino} and the ability to use rhino::build_js</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -750,35 +782,50 @@
 </section>
 <section id="example-package.json-2" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb5" data-code-line-numbers="6,8-9,16-18"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb5" data-code-line-numbers="5,8,15-17"><pre class="sourceCode numberSource json full-height-js-code number-lines code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">{</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"module"</span><span class="fu">,</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span><span class="fu">,</span></span>
 <span id="cb5-8"><a href="#cb5-8"></a>    <span class="dt">"build"</span><span class="fu">:</span> <span class="st">"node build.js"</span></span>
 <span id="cb5-9"><a href="#cb5-9"></a>  <span class="fu">},</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a>  <span class="fu">},</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.7"</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>  <span class="fu">}</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-10"><a href="#cb5-10"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="dt">"@types/jquery"</span><span class="fu">:</span> <span class="st">"^3.5.14"</span><span class="fu">,</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>    <span class="dt">"sortablejs"</span><span class="fu">:</span> <span class="st">"^1.15.0"</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>  <span class="fu">},</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.10"</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a>  <span class="fu">}</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<aside class="notes">
+<p>Might notice the “type” option added to the package.json file. This is required for esbuild to bundle up the JS code.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="linting" class="slide level2">
 <h2>Linting</h2>
 <div>
 <ul>
-<li class="fragment">VS Code extensions</li>
-<li class="fragment">eslint</li>
+<li class="fragment">Linting helps improve code quality and consistency</li>
+<li class="fragment"><code>npm install eslint --save-dev</code>
+<ul>
+<li class="fragment">Extension in VS Code that applies the eslint linting standards</li>
+<li class="fragment">Customisable by adding own rules into <code>.eslintrc</code></li>
+</ul></li>
 </ul>
 </div>
-
 <aside class="notes">
 <p>Big believer that all projects should include linting from the offset Lints in JS that wasn’t aware of before: - No longer requiring “;” at the end of calls</p>
 <style type="text/css">
@@ -792,39 +839,35 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<aside><div>
-<p>Other linting packages include</p>
-</div></aside></section>
+</section>
 <section id="example-package.json-3" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb6" data-code-line-numbers="7,16,18-19"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb6" data-code-line-numbers="17"><pre class="sourceCode numberSource json full-height-js-code number-lines code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">{</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"module"</span><span class="fu">,</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"jest"</span><span class="fu">,</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"echo </span><span class="ch">\"</span><span class="st">Error: no test specified</span><span class="ch">\"</span><span class="st"> &amp;&amp; exit 1"</span><span class="fu">,</span></span>
 <span id="cb6-8"><a href="#cb6-8"></a>    <span class="dt">"build"</span><span class="fu">:</span> <span class="st">"node build.js"</span></span>
 <span id="cb6-9"><a href="#cb6-9"></a>  <span class="fu">},</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a>  <span class="fu">},</span></span>
-<span id="cb6-16"><a href="#cb6-16"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb6-17"><a href="#cb6-17"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.7"</span><span class="fu">,</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a>    <span class="dt">"eslint"</span><span class="fu">:</span> <span class="st">"^8.0.1"</span></span>
-<span id="cb6-19"><a href="#cb6-19"></a>  <span class="fu">}</span></span>
-<span id="cb6-20"><a href="#cb6-20"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-10"><a href="#cb6-10"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="dt">"@types/jquery"</span><span class="fu">:</span> <span class="st">"^3.5.14"</span><span class="fu">,</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="dt">"sortablejs"</span><span class="fu">:</span> <span class="st">"^1.15.0"</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>  <span class="fu">},</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.10"</span><span class="fu">,</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>    <span class="dt">"eslint"</span><span class="fu">:</span> <span class="st">"^8.35.0"</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a>  <span class="fu">}</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="unit-testing" class="slide level2">
 <h2>Unit Testing</h2>
-<div>
-<ul>
-<li class="fragment"><code>npm install --save-dev jest</code></li>
-</ul>
+<div class="fragment">
+<p><code>npm install --save-dev jest</code></p>
 </div>
+<div class="fragment">
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource js number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">// component/Button.js</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="im">import</span> Component <span class="im">from</span> <span class="st">'Component'</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
@@ -843,8 +886,9 @@
 <span id="cb7-16"><a href="#cb7-16"></a>  <span class="kw">const</span> button <span class="op">=</span> <span class="kw">new</span> <span class="fu">Button</span>()</span>
 <span id="cb7-17"><a href="#cb7-17"></a>  <span class="fu">expect</span>(button<span class="op">.</span><span class="at">html</span>)<span class="op">.</span><span class="fu">toBe</span>(<span class="st">'&lt;button ...&gt;...&lt;/button&gt;'</span>)</span>
 <span id="cb7-18"><a href="#cb7-18"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <aside class="notes">
-<p>Many different testing frameworks available in JavaScript, each with different syntaxes Using Jest - partially as recommended when running <code>npm init</code>, partially because recommended as it has a very similar structure as {testthat} Define the test name in the first argument, then run the test in the second. Individual tests used as expect().to() Other unit testing packages include MochaJS, ChaiJS and Cypress.io</p>
+<p>Many different testing frameworks available in JavaScript, each with their own syntaxes Using Jest as was recommended due to it having a very similar structure as {testthat} Define the test name in the first argument, then run the test in the second. Individual tests used as expect().to() Other unit testing packages include MochaJS, ChaiJS and Cypress.io</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -859,31 +903,33 @@
 </section>
 <section id="example-package.json-4" class="slide level2">
 <h2>Example package.json</h2>
-<div class="sourceCode" id="cb8" data-code-line-numbers="6-7,9,16-17,20-21"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
+<div class="sourceCode" id="cb8" data-code-line-numbers="7,18"><pre class="sourceCode numberSource json full-height-js-code number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"designer"</span><span class="fu">,</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"version"</span><span class="fu">:</span> <span class="st">"0.2.0"</span><span class="fu">,</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"JS for designer app"</span><span class="fu">,</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"main"</span><span class="fu">:</span> <span class="st">"index.js"</span><span class="fu">,</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="dt">"type"</span><span class="fu">:</span> <span class="st">"module"</span><span class="fu">,</span></span>
 <span id="cb8-6"><a href="#cb8-6"></a>  <span class="dt">"scripts"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb8-7"><a href="#cb8-7"></a>    <span class="dt">"test"</span><span class="fu">:</span> <span class="st">"jest"</span><span class="fu">,</span></span>
 <span id="cb8-8"><a href="#cb8-8"></a>    <span class="dt">"build"</span><span class="fu">:</span> <span class="st">"node build.js"</span></span>
 <span id="cb8-9"><a href="#cb8-9"></a>  <span class="fu">},</span></span>
-<span id="cb8-10"><a href="#cb8-10"></a>  <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"Ashley Baldry"</span><span class="fu">,</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a>  <span class="dt">"license"</span><span class="fu">:</span> <span class="st">"MIT"</span><span class="fu">,</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a>    <span class="dt">"jquery"</span><span class="fu">:</span> <span class="st">"^3.6.0"</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a>  <span class="fu">},</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.7"</span><span class="fu">,</span></span>
-<span id="cb8-18"><a href="#cb8-18"></a>    <span class="dt">"eslint"</span><span class="fu">:</span> <span class="st">"^8.0.1"</span><span class="fu">,</span></span>
-<span id="cb8-19"><a href="#cb8-19"></a>    <span class="dt">"jest"</span><span class="fu">:</span> <span class="st">"^29.3.1"</span></span>
-<span id="cb8-20"><a href="#cb8-20"></a>  <span class="fu">}</span></span>
-<span id="cb8-21"><a href="#cb8-21"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-10"><a href="#cb8-10"></a>  <span class="dt">"dependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>    <span class="dt">"@types/jquery"</span><span class="fu">:</span> <span class="st">"^3.5.14"</span><span class="fu">,</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>    <span class="dt">"@types/rstudio-shiny"</span><span class="fu">:</span> <span class="st">"github:rstudio/shiny"</span><span class="fu">,</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>    <span class="dt">"sortablejs"</span><span class="fu">:</span> <span class="st">"^1.15.0"</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>  <span class="fu">},</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a>  <span class="dt">"devDependencies"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>    <span class="dt">"esbuild"</span><span class="fu">:</span> <span class="st">"^0.17.10"</span><span class="fu">,</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a>    <span class="dt">"eslint"</span><span class="fu">:</span> <span class="st">"^8.35.0"</span><span class="fu">,</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>    <span class="dt">"jest"</span><span class="fu">:</span> <span class="st">"^29.4.3"</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>  <span class="fu">}</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="continuous-integration-ci" class="slide level2">
 <h2>Continuous Integration (CI)</h2>
+<div class="fragment">
 <p>Include JavaScript unit tests as part of your GitHub Actions</p>
+</div>
+<div class="fragment">
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Run JS Tests (Jest)</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="fu">on</span><span class="kw">:</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
@@ -902,6 +948,7 @@
 <span id="cb9-16"><a href="#cb9-16"></a><span class="at">      </span><span class="fu">run</span><span class="kw">:</span><span class="at"> npm install</span></span>
 <span id="cb9-17"><a href="#cb9-17"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run tests</span></span>
 <span id="cb9-18"><a href="#cb9-18"></a><span class="at">      </span><span class="fu">run</span><span class="kw">:</span><span class="at"> npm run test </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <aside class="notes">
 <p>I have found when running unit tests through GH actions that certain JS libraries are pre-installed on the build servers, so no steps are required prior to installing the dependencies for your own JavaScript code.</p>
 <p>The whole process takes little over a minute</p>
@@ -937,24 +984,13 @@ Done in 6.82s.</code></pre>
 <section id="finished-result" class="slide level2">
 <h2>Finished Result</h2>
 
-<img data-src="images/designer-dev-srcjs.png" class="r-stretch quarto-figure-center"><p class="caption">JavaScript structure of dev branch</p><aside class="notes">
-<ul>
-<li>In this project I did use yarn, but have seen the added convenience of using node as the package manager - one fewer dependency</li>
-</ul>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="qa" class="slide level2">
-<h2>Q&amp;A</h2>
+<img data-src="images/designer-dev-srcjs.png" class="r-stretch quarto-figure-center"><p class="caption">JavaScript structure of dev branch of the {designer} package</p></section>
+<section id="finished-result-1" class="slide level2">
+<h2>Finished Result</h2>
+
+<img data-src="images/designer-dev-js.png" class="r-stretch quarto-figure-center"><p class="caption">Minified JavaScript file in the dev branch of the {designer} package</p></section>
+<section id="qa." class="slide level2 q-a-slide">
+<h2>Q&amp;A.</h2>
 <div class="footer footer-default">
 
 </div>
