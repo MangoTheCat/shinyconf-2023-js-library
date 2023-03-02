@@ -37,7 +37,7 @@ title-slide-attributes:
 
 ## Motivation
 
-![Demo of the 0.1.0 designer application](https://raw.githubusercontent.com/ashbaldry/designer/main/man/figures/example_app.gif)
+![Demo of the {designer} application](images/designer_app.mp4)
 
 ::: footer
 Latest version: [https://ashbaldry.shinyapps.io/designer/](https://ashbaldry.shinyapps.io/designer/)
