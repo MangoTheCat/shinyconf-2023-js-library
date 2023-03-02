@@ -48,26 +48,28 @@ Latest version: [https://ashbaldry.shinyapps.io/designer/](https://ashbaldry.shi
 - This is the application within the designer package. It allows a code-free way to template the UI of shiny applications.
 :::
 
-## Motivation 
+## Motivation
 
-![JavaScript structure of 0.1.0 release](images/designer-0-1-js.png)
+![Structure of the JavaScript code in the {designer} package for version 0.1.0](images/designer-0-1-js.png)
 
 ::: {.incremental}
-- Adding more components made the code harder to read
+- Adding more components would make the code harder to read
 - Lots of duplicated code that could be simplified
 :::
 
 ::: notes
 - In the initial release of the designer package, there are 4 JavaScript files:
   - Three that are between 50 and 100 lines
-    - A custom input for the content of the template
-    - Behaviour to trigger on application load
-    - Helper functions for the initial set-up
+    - A custom input for the content of the template (canvas-page-input.js)
+    - Behaviour to trigger on application load (designer-app-setup.js)
+    - Helper functions for the initial set-up (designer-app-utils.js)
   - The fourth (create-element.js) is 650 lines - most amount of JS I've written
     - How to create each type of component
 - In the second iteration I was including some bs4Dash components to the application, and adding them to that file was becoming unmanageable
 - Most of the code in that file was functionality about adding a new draggable element that was copying and pasting code from other components
 :::
+
+## JavaScript Library {.q-a-slide}
 
 ## Library Set-Up
 
@@ -75,10 +77,10 @@ Latest version: [https://ashbaldry.shinyapps.io/designer/](https://ashbaldry.shi
 - Choose your IDE of choice
 - Create a directory in your project for JS code
   - Standard name: `srcjs`
-  - Don't forget to add the folder to `.Rbuildignore`!
+  - If included in an R package, add folder to `.Rbuildignore`
 - Download and install [Node.js](https://nodejs.org/)
-- Open the directory up in your IDE
-- Run `npm init` in the terminal to create `package.json`
+- Open `srcjs` directory up in your IDE
+- Run `npm init` in the terminal and initialise your project
 :::
 
 ::: footer
@@ -91,10 +93,25 @@ Top IDEs: [https://www.tabnine.com/blog/best-ides-for-javascript/](https://www.t
 - "src" stands for "source"
 - If you are including the application in the package then it won't need to be included in the published version of the package
 - Node is the runtime for JavaScript, it allows to run JavaScript code without having to be in a browser. It is much more powerful than that, it includes `npm`, a package manager to install all the required dependencies for your JS code
-- `npm init` will ask a series of questions around the package like name, version and description. It will add this all into the package.json file
 :::
 
-## Example package.json
+## Library Set-Up
+
+![Running `npm init` in VS Code](images/npm_init.mp4)
+
+::: {.notes}
+- `npm init` will ask a series of questions around the package like name, version and description. It will add this all into the package.json file
+- The package.json file is the JS version of the description file
+- Two key differences:
+  - "main" is the entry point of the library. It is a single file where all of exported code is available to call or run.
+- A key difference is the "scripts" section. 
+  - One of the options that is asked when running `npm init` is the testing command. 
+- Anything defined in this list can be performed in the terminal with the prefix "node"
+- Speaking of dependencies...
+:::
+
+<!--
+## Libaray Set-Up
 
 ```{.json .code-overflow-wrap code-line-numbers="5-8"}
 {
@@ -109,22 +126,11 @@ Top IDEs: [https://www.tabnine.com/blog/best-ides-for-javascript/](https://www.t
 }
 ```
 
-::: {.incremental}
 - "main" is the entry point of the library
 - "scripts" is a list of commands that can be used in the terminal
   - Run by calling `npm run test`
   - Dependency package commands can be used, or `node file.js` to run like `Rscript file.R`
-:::
-
-::: {.notes}
-- The package.json file is the JS version of the description file
-- Two key differences:
-  - "main" is the entry point of the library. It is a single file where all of exported code is available to call or run.
-- A key difference is the "scripts" section. 
-  - One of the options that is asked when running `npm init` is the testing command. 
-- Anything defined in this list can be performed in the terminal with the prefix "node"
-- Speaking of dependencies...
-:::
+-->
 
 ## Dependency Management
 
@@ -134,6 +140,7 @@ Top IDEs: [https://www.tabnine.com/blog/best-ides-for-javascript/](https://www.t
 - Include shiny and jQuery as dependencies
   - `npm install github:rstudio/shiny`
   - `npm install @types/jquery@3.5.14`
+- Project specific dependencies can also be added here
 :::
 
 :::{.fragment}
@@ -147,13 +154,20 @@ Unlike renv, npm doesn't cache the dependencies, it adds them all within the nod
 
 The shiny repository has the package.json in the top level of the repository, making it easy for us to grab the JavaScript part of it through `npm install`. This helps us not have issues with using the Shiny object for custom messages and sending input values to the UI within our own JavaScript
 
+Baked into shiny, so they are used for development process
+
 Specifying the version of jQuery so that it matches the version available in shiny. The types refers to TypeScript
+
+Mention that additional libraries can be installed with npm install
 
 Twice I've contributed to packages with JavaScript and twice we've forgotten to include this file. 
 :::
 
-## Example package.json
+## Dependency Management
 
+![JS library structure after installing required dependencies](images/package_json_deps.png)
+
+<!--
 ```{.json code-line-numbers="8-12"}
 {
   "name": "designer",
@@ -169,85 +183,19 @@ Twice I've contributed to packages with JavaScript and twice we've forgotten to 
   }
 }
 ```
+-->
 
 ::: {.notes}
 You can now see the dependencies specified within the package.json file
 
-Heavily dependent on sortable js in my project, so inlcuded as a dependency
+Heavily dependent on sortable js in my project, so included as a dependency
 :::
 
-## Communication Between Files
-
-::: {.incremental}
-- JavaScript files work in a modular fashion
-  - Similar to the [`{box}`](https://klmr.me/box/) package works
-  - Only exported objects are accessible in other modules
-    - When defining an object add `export` beforehand
-  - Objects have to be explicitly imported before use
-    - `import { ... } from './dependency.js'`
-:::
-
-::: {.notes}
-R is one of the few languages where the location of a file in a package doesn't matter, it is all bundled into a single namespace.
-JavaScript assumes that nothing has been imported in the script, so any call to another function object will result in an error.
-
-If you've ever used the {box} package (one of the dependencies of the {rhino} application infrastructure) then it is similar in how it works.
-
-Whilst this might cause some time to split out your JavaScript into several files and reference using import/export methods will make it a lot easier to manage your code in the long run.
-:::
-
-## Class Inheritance
-
-::: {.columns}
-::: {.column}
-::: {.incremental}
-- A way to reduce duplicated code
-- Extremely useful when creating 20+ components
-  - `Component` class contains several methods accessible to individual components
-  - Overwrite methods when needed
-:::
-:::
-
-::: {.column}
-```{.js .full-height-js-code}
-// component/Component.js
-export class Component {
-  html = '<div></div>'
-  constructor () {
-    // runs when class is created
-  }
-  
-  createComponent () {
-    return this.html
-  }
-}
-
-// component/Button.js
-import {Component} from './Component'
-
-class Button extends Component {
-  html = '<button ...>...</button>'
-  constructor () {
-    // runs Component constructor
-    super()
-  }
-}
-```
-:::
-:::
-
-::: {.notes}
-- R is predominantly a functional language
-- Most programming languages, including JavaScript, are more object orientated - similar to how {R6} works
-- Use class inheritance to avoid the repeating code to create the different UI components in the designer application
-- Component class included methods to generate random IDs, or validating the CSS unit string
-- Usually overwrote a method that created the the HTML, as most components have options that can be set by the user
-:::
-
-## Bundling
+## Bundling/Minifying Code
 
 ```{.js}
 import { build } from 'esbuild'
+
 build({
   entryPoints: ['index.js'],
   bundle: true,
@@ -267,6 +215,8 @@ build({
 :::
 
 ::: {.notes}
+As a start, we can add all the code in the scripts into a single index.js file.
+
 Several bundlers available, however when searching found that esbuild is significantly quicker, and have rarely seen it take longer than 0.5 seconds to bundle my JavaScript code.
 
 Save dev is an option that will add the library to a development dependency, sort of like a Suggets in the DESCRIPTION, but this will never need to be installed by the end user.
@@ -274,8 +224,11 @@ Save dev is an option that will add the library to a development dependency, sor
 The minifying will reduce all variable names you set into single letters. This makes it really hard to know what is going on in the console when debugging shiny applications. By including a source map you can at least see what code is being run when it errors. Alternatively include a build option that doesn't minify the code.
 :::
 
-## Example package.json
+## Bundling/Minifying Code
 
+![JS library structure after installing bundling library](images/package_json_build.png)
+
+<!--
 ```{.json .full-height-js-code code-line-numbers="5,8,15-17"}
 {
   "name": "designer",
@@ -296,6 +249,7 @@ The minifying will reduce all variable names you set into single letters. This m
   }
 }
 ```
+-->
 
 ::: {.notes}
 Might notice the "type" option added to the package.json file. This is required for esbuild to bundle up the JS code.
@@ -307,7 +261,7 @@ Might notice the "type" option added to the package.json file. This is required 
 - Linting helps improve code quality and consistency
 - `npm install eslint --save-dev`
   - Extension in VS Code that applies the eslint linting standards
-  - Customisable by adding own rules into `.eslintrc`
+  - Customisable by adding own rules into `.eslintrc.yml`
 :::
 
 ::: {.notes}
@@ -318,6 +272,9 @@ Lints in JS that wasn't aware of before:
 
 ## Example package.json
 
+![JS library structure after installing linting](images/package_json_lint.png)
+
+<!--
 ```{.json .full-height-js-code code-line-numbers="17"}
 {
   "name": "designer",
@@ -339,16 +296,137 @@ Lints in JS that wasn't aware of before:
   }
 }
 ```
+-->
+
+## Communication Between Files
+
+::: {.columns}
+::: {.column}
+::: {.incremental}
+- JavaScript files work in a modular fashion
+- Only exported objects are accessible in other modules
+- Objects have to be explicitly imported before use
+- Add `"type": "module"` to package.json to enable `import` to work
+:::
+:::
+
+::: {.column}
+```{.js .full-height-js-code code-line-numbers="1-2,13-16"}
+// component/component.js
+export class Component {
+  html = '<div></div>'
+  constructor () {
+    // runs when class is created
+  }
+  
+  createComponent () {
+    return this.html
+  }
+}
+
+// component/button.js
+import {Component} from './Component'
+
+class Button extends Component {
+  html = '<button ...>...</button>'
+  constructor () {
+    // runs Component constructor
+    super()
+  }
+}
+```
+:::
+:::
+
+::: {.notes}
+R is one of the few languages where the location of a file in a package doesn't matter, it is all bundled into a single namespace.
+JavaScript assumes that nothing has been imported in the script, so any call to another function object will result in an error.
+
+If you've ever used the {box} package (one of the dependencies of the {rhino} application infrastructure) then it is similar in how it works.
+
+Whilst this might cause some time to split out your JavaScript into several files and reference using import/export methods will make it a lot easier to manage your code in the long run.
+
+If you want to use the import calls, then you will need to add the type field to the package.json file in order for it to bundle
+:::
+
+## Class Inheritance
+
+::: {.columns}
+::: {.column}
+::: {.incremental}
+- A way to reduce duplicated code
+- Extremely useful when creating 20+ components
+  - `Component` class contains several methods accessible to individual components
+  - Overwrite methods when needed
+:::
+:::
+
+::: {.column}
+```{.js .full-height-js-code code-line-numbers="2-11,16-22"}
+// component/component.js
+export class Component {
+  html = '<div></div>'
+  constructor () {
+    // runs when class is created
+  }
+  
+  createComponent () {
+    return this.html
+  }
+}
+
+// component/button.js
+import {Component} from './Component'
+
+class Button extends Component {
+  html = '<button ...>...</button>'
+  constructor () {
+    // runs Component constructor
+    super()
+  }
+}
+```
+:::
+:::
+
+::: {.notes}
+- R is predominantly a functional language
+- Most programming languages, including JavaScript, are more object orientated - similar to how {R6} works
+- Use class inheritance to avoid the repeating code to create the different UI components in the designer application
+- Component class included methods to generate random IDs, or validating the CSS unit string
+- Also included the method to initialise the dragging behaviour from sortable JS
+- Usually overwrote a method that created the the HTML, as most components have options that can be set by the user
+
+Other things that I have used the inheritance 
+:::
+
+## Library Structure
+
+![JS library structure after modularising code](images/index_js_mod.png)
 
 ## Unit Testing
 
-::: {.fragment}
-`npm install --save-dev jest`
+::: {.incremental}
+- Many testing frameworks available in JS
+- [Jest](https://jestjs.io/) has similar structure to {testthat}
+  - Add tests to `__tests__` directory
+  - Suffix filename with `.test.js`
+- `npm install --save-dev jest`
+- `npm install --save-dev @babel/plugin-transform-modules-commonjs`
+  - Required to run tests using modular format
 :::
 
-::: {.fragment}
-```{.js}
-// component/Button.js
+::: {.notes}
+Many different testing frameworks available in JavaScript, each with their own syntaxes
+Using Jest as was recommended due to it having a very similar structure as {testthat}
+Define the test name in the first argument, then run the test in the second. Individual tests used as expect().to()
+Other unit testing packages include MochaJS, ChaiJS and Cypress.io
+:::
+
+## Unit Testing
+
+```{.js code-line-numbers="12,15-18"}
+// component/button.js
 import Component from 'Component'
 
 class Button extends Component {
@@ -366,41 +444,28 @@ test('sanity test - button constructs successfully', () => {
   const button = new Button()
   expect(button.html).toBe('<button ...>...</button>')
 })
-
 ```
-:::
 
-::: {.notes}
-Many different testing frameworks available in JavaScript, each with their own syntaxes
-Using Jest as was recommended due to it having a very similar structure as {testthat}
-Define the test name in the first argument, then run the test in the second. Individual tests used as expect().to()
-Other unit testing packages include MochaJS, ChaiJS and Cypress.io
-:::
+<!--
+## Unit Testing
 
-## Example package.json
+Add to `.babelrc`:
 
-```{.json .full-height-js-code code-line-numbers="7,18"}
+```{.yaml}
 {
-  "name": "designer",
-  "version": "0.2.0",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "test": "jest",
-    "build": "node build.js"
-  },
-  "dependencies": {
-    "@types/jquery": "^3.5.14",
-    "@types/rstudio-shiny": "github:rstudio/shiny",
-    "sortablejs": "^1.15.0"
-  },
-  "devDependencies": {
-    "esbuild": "^0.17.10",
-    "eslint": "^8.35.0",
-    "jest": "^29.4.3"
+  "env": {
+    "test": {
+      "plugins": ["@babel/plugin-transform-modules-commonjs"]
+    }
   }
 }
+
 ```
+-->
+
+## Unit Testing
+
+![Running `npm run test` in VS Code](images/npm_test.mp4)
 
 ## Continuous Integration (CI)
 
@@ -461,7 +526,7 @@ Done in 6.82s.
 
 ## Finished Result
 
-![JavaScript structure of dev branch of the {designer} package](images/designer-dev-srcjs.png)
+![Structure of JavaScript code of the {designer} package](images/package_json_final.png)
 
 ## Finished Result
 

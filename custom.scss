@@ -31,6 +31,10 @@ aside p {
   margin-bottom: 8vh;
 }
 
+.reveal video {
+  height: 550px;
+}
+
 #title-slide h1 {
   margin-bottom: 5vh;
 }
@@ -41,8 +45,9 @@ pre.full-height-js-code.sourceCode code {
 
 .q-a-slide h2 {
   margin-top: 25vh;
-  font-size: 6rem;
-  background: linear-gradient(to right, #A561FF 0%, #64F0AF 20%);
+  font-size: 8rem;
+  width: fit-content;
+  background: linear-gradient(to right, #A561FF 0%, #64F0AF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
