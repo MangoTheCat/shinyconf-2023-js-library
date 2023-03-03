@@ -398,7 +398,7 @@
 <ul>
 <li class="fragment"><code>{shiny} + JS =</code> <span class="emoji" data-emoji="heart">❤️</span></li>
 <li class="fragment"><code>tags$script(HTML("</code><br> &nbsp;&nbsp;&nbsp;&nbsp;<code>$(document).ready(function() {</code><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>$('[data-toggle="tooltip"]').tooltip()</code><br> &nbsp;&nbsp;&nbsp;&nbsp;<code>})</code><br> <code>"))</code></li>
-<li class="fragment"><code>&lt;script src="custom.js"&gt;&lt;/script&gt;</code></li>
+<li class="fragment"><code>tags$script(src="custom.js")</code></li>
 <li class="fragment"><code>Shiny.inputBindings.register(inputBinding, "your.inputBinding")</code></li>
 <li class="fragment"><span class="emoji" data-emoji="shrug">🤷</span></li>
 </ul>
@@ -547,9 +547,13 @@
 <ul>
 <li>“main” is the entry point of the library. It is a single file where all of exported code is available to call or run.</li>
 </ul></li>
-<li>A key difference is the “scripts” section.
+<li>“scripts” is a list of commands that can be used in the terminal
 <ul>
+<li>Run by calling <code>npm run test</code>
+<ul>
+<li>Dependency package commands can be used, or <code>node file.js</code> to run like <code>Rscript file.R</code></li>
 <li>One of the options that is asked when running <code>npm init</code> is the testing command.</li>
+</ul></li>
 </ul></li>
 <li>Anything defined in this list can be performed in the terminal with the prefix “node”</li>
 <li>Speaking of dependencies…</li>
@@ -779,8 +783,8 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="example-package.json" class="slide level2">
-<h2>Example package.json</h2>
+<section id="linting-1" class="slide level2">
+<h2>Linting</h2>
 
 
 <!--

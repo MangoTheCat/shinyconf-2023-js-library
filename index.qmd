@@ -22,7 +22,7 @@ title-slide-attributes:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`$('[data-toggle="tooltip"]').tooltip()`<br>
 &nbsp;&nbsp;&nbsp;&nbsp;`})`<br>
 `"))`
-- `<script src="custom.js"></script>`
+- `tags$script(src="custom.js")`
 - `Shiny.inputBindings.register(inputBinding, "your.inputBinding")`
 - :shrug:
 :::
@@ -104,8 +104,10 @@ Top IDEs: [https://www.tabnine.com/blog/best-ides-for-javascript/](https://www.t
 - The package.json file is the JS version of the description file
 - Two key differences:
   - "main" is the entry point of the library. It is a single file where all of exported code is available to call or run.
-- A key difference is the "scripts" section. 
-  - One of the options that is asked when running `npm init` is the testing command. 
+- "scripts" is a list of commands that can be used in the terminal
+  - Run by calling `npm run test`
+    - Dependency package commands can be used, or `node file.js` to run like `Rscript file.R`
+    - One of the options that is asked when running `npm init` is the testing command. 
 - Anything defined in this list can be performed in the terminal with the prefix "node"
 - Speaking of dependencies...
 :::
@@ -270,7 +272,7 @@ Lints in JS that wasn't aware of before:
 - No longer requiring ";" at the end of calls
 :::
 
-## Example package.json
+## Linting
 
 ![JS library structure after installing linting](images/package_json_lint.png)
 
